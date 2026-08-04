@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday! ✨</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #2b1055 0%, #7597de 100%); /* Latar belakang lebih gelap agar kembang api realistis terlihat menyala */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Canvas Kembang Api Realistis */
+    #fireworksCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Container Bunga & Love Jatuh Dari Atas */
+    .falling-elements {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .falling-item {
+      position: absolute;
+      top: -40px;
+      color: #ffb6c1;
+      user-select: none;
+      animation: fallDown linear infinite;
+      opacity: 0.9;
+      filter: drop-shadow(0 0 5px rgba(255, 182, 193, 0.6));
+    }
+
+    @keyframes fallDown {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translateY(105vh) rotate(360deg);
+        opacity: 0.2;
+      }
+    }
+
+    /* Tampilan Kartu Tema Pink */
+    .card {
+      background: rgba(255, 240, 245, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 2.5rem 2rem;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 182, 193, 0.4);
+      text-align: center;
+      max-width: 450px;
+      width: 90%;
+      z-index: 10;
+      border: 2px solid rgba(255, 192, 203, 0.8);
+      position: absolute;
+      transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    #card1 {
+      animation: floatCard 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatCard {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    #card2 {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.7);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .show-card2 #card1 {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.7);
+    }
+
+    .show-card2 #card2 {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #ff4b72;
+      cursor: pointer;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .close-btn:hover {
+      transform: scale(1.2) rotate(90deg);
+    }
+
+    .card h1 {
+      color: #d81b60;
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h2 {
+      color: #d81b60;
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .card p {
+      color: #4a4a4a;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+      text-align: justify;
+    }
+
+    .btn-wish {
+      background: linear-gradient(45deg, #ff4081, #ff80ab);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-wish:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(255, 64, 129, 0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="fireworksCanvas"></canvas>
+  <div class="falling-elements" id="fallingContainer"></div>
+
+  <div class="card" id="card1">
+    <h1>💖Happy Birthday!💖</h1>
+    <p style="text-align: center;">Semoga harimu dipenuhi dengan kebahagiaan, senyuman, dan semua hal manis di dunia ini</p>
+    <button class="btn-wish" onclick="openSecondCard()">Klik💌</button>
+  </div>
+
+  <div class="card" id="card2">
+    <span class="close-btn" onclick="closeCard()">&times;</span>
+    <h2>Untuk Seseorsng yang ku kenal baik 💕</h2>
+    <p>
+      Selamat bertambah usia ya, Semoga setiap langkahmu dipermudah, cita-citamu tercapai, dan selalu dikelilingi oleh orang-orang yang tulus menyayangimu.
+    </p>
+    <p>
+      Terima kasih telah menjadi sosok yang luar biasa dan selalu membawa kehangatan. Semoga dunia selalu ramah padamu, dan bahagia selalu menyertai di mana pun kamu berada. Jangan pernah lelah untuk menjadi orang baik
+    </p>
+    <p style="text-align: center; font-weight: bold; color: #d81b60;">
+      Happy Birthday & Enjoy Your Special Day Orang Baik!
+    </p>
+  </div>
+
+  <script>
+    // --- 1. KEMBANG API REALISTIS (Physics-based Firework system) ---
+    const canvas = document.getElementById('fireworksCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    let fireworks = [];
+    let particles = [];
+
+    // Warna Kembang Api Realistis (Emas, Perak, Merah, Merah Muda, Oranye)
+    const realisticColors = [
+      '#ffcc00', '#ff9900', '#ff3300', '#ffffff', 
+      '#ff6699', '#ffccff', '#e6005c', '#ffd700'
+    ];
+
+    class Firework {
+      constructor(sx, sy, tx, ty) {
+        this.x = sx;
+        this.y = sy;
+        this.sx = sx;
+        this.sy = sy;
+        this.tx = tx;
+        this.ty = ty;
+        this.distanceToTarget = Math.hypot(tx - sx, ty - sy);
+        this.distanceTraveled = 0;
+        this.coordinates = [];
+        this.coordinateCount = 3;
+        while (this.coordinateCount--) {
+          this.coordinates.push([this.x, this.y]);
+        }
+        this.angle = Math.atan2(ty - sy, tx - sx);
+        this.speed = 2;
+        this.acceleration = 1.05;
+        this.brightness = Math.random() * 20 + 80;
+      }
+
+      update(index) {
+        this.coordinates.pop();
+        this.coordinates.unshift([this.x, this.y]);
+
+        this.speed *= this.acceleration;
+        const vx = Math.cos(this.angle) * this.speed;
+        const vy = Math.sin(this.angle) * this.speed;
+        this.distanceTraveled = Math.hypot(this.x + vx - this.sx, this.y + vy - this.sy);
+
+        if (this.distanceTraveled >= this.distanceToTarget) {
+          createBurst(this.tx, this.ty);
+          fireworks.splice(index, 1);
+        } else {
+          this.x += vx;
+          this.y += vy;
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = '#ffcc00';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+    }
+
+    class BurstParticle {
+      constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.coordinates = [];
+        this.coordinateCount = 5;
+        while (this.coordinateCount--) {
+          this.coordinates.push([this.x, this.y]);
+        }
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 10 + 1;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.friction = 0.95;
+        this.gravity = 0.6;
+        this.color = color;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.015 + 0.005;
+      }
+
+      update(index) {
+        this.coordinates.pop();
+        this.coordinates.unshift([this.x, this.y]);
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.vy += this.gravity * 0.1;
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+
+        if (this.alpha <= this.decay) {
+          particles.splice(index, 1);
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+        ctx.lineTo(this.x, this.y);
+        ctx.strokeStyle = `rgba(${hexToRgb(this.color)}, ${this.alpha})`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      }
+    }
+
+    function hexToRgb(hex) {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const num = parseInt(c, 16);
+      return `${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}`;
+    }
+
+    function createBurst(x, y) {
+      const particleCount = 100;
+      const color = realisticColors[Math.floor(Math.random() * realisticColors.length)];
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new BurstParticle(x, y, color));
+      }
+    }
+
+    function launchFirework() {
+      const startX = canvas.width / 2 + (Math.random() - 0.5) * (canvas.width * 0.6);
+      const startY = canvas.height;
+      const targetX = Math.random() * (canvas.width * 0.8) + canvas.width * 0.1;
+      const targetY = Math.random() * (canvas.height * 0.4) + canvas.height * 0.1;
+      fireworks.push(new Firework(startX, startY, targetX, targetY));
+    }
+
+    function animateFireworks() {
+      requestAnimationFrame(animateFireworks);
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'lighter';
+
+      let i = fireworks.length;
+      while (i--) {
+        fireworks[i].draw();
+        fireworks[i].update(i);
+      }
+
+      let j = particles.length;
+      while (j--) {
+        particles[j].draw();
+        particles[j].update(j);
+      }
+    }
+
+    function autoFireworks() {
+      let count = 0;
+      const interval = setInterval(() => {
+        launchFirework();
+        count++;
+        if (count > 10) clearInterval(interval);
+      }, 400);
+    }
+
+    // --- 2. LOGIKA KARTU ---
+    function openSecondCard() {
+      document.body.classList.add('show-card2');
+      // Luncurkan beberapa kembang api bersamaan saat diklik
+      for (let i = 0; i < 5; i++) {
+        setTimeout(launchFirework, i * 200);
+      }
+    }
+
+    function closeCard() {
+      document.body.classList.remove('show-card2');
+    }
+
+    // --- 3. ANIMASI BUNGA & LOVE JATUH DARI ATAS (LEBIH BANYAK) ---
+    const container = document.getElementById('fallingContainer');
+    const symbols = ['🌸', '💖', '🌺', '💕', '✨', '🌷', '💗', '🌸', '💕'];
+
+    function createFallingItem() {
+      const item = document.createElement('div');
+      item.classList.add('falling-item');
+      item.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+      
+      item.style.left = Math.random() * 100 + 'vw';
+      item.style.animationDuration = (Math.random() * 3 + 3) + 's'; // Durasi jatuh bervariasi
+      item.style.fontSize = (Math.random() * 1.5 + 0.8) + 'rem';
+      
+      container.appendChild(item);
+
+      setTimeout(() => {
+        item.remove();
+      }, 6000);
+    }
+
+    window.onload = () => {
+      animateFireworks();
+      autoFireworks();
+      // Frekuensi ditingkatkan menjadi 120ms agar hiasan falling items jauh lebih banyak
+      setInterval(createFallingItem, 120);
+    };
+  </script>
+</body>
+</html>
